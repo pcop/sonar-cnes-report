@@ -128,7 +128,7 @@ public class DocXExporter implements IExporter {
                 try (
                         InputStream fileInputStream = file.exists() && !filename.isEmpty() ? new FileInputStream(file)
                                         : getClass().getResourceAsStream(
-                                                        StringManager.getProperty(DEFAULT_TEMPLATE));
+                                                        StringManager.getLocalizedTemplate(DEFAULT_TEMPLATE));
                         OPCPackage opcPackage = OPCPackage.open(fileInputStream);
                         XWPFDocument document = new XWPFDocument(opcPackage)
                 ) {

@@ -21,6 +21,10 @@ import fr.cnes.sonar.plugin.tools.PluginStringManager;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.server.ws.WebService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ReportWs implements WebService {
 
     // Sonarqube configuration
@@ -88,8 +92,10 @@ public class ReportWs implements WebService {
         WebService.NewParam languageParam = report.createParam(PluginStringManager.getProperty("api.report.args.language"));
         languageParam.setDescription(PluginStringManager.getProperty("api.report.args.description.language"));
         languageParam.setRequired(false);
-        languageParam.setPossibleValues(PluginStringManager.getProperty("api.report.args.defaultValue.language"),
-                PluginStringManager.getProperty("api.report.args.possibleValue.language"));
+        final List<String> languages = new ArrayList<>();
+        languages.add(PluginStringManager.getProperty("api.report.args.defaultValue.language"));
+        languages.addAll(Arrays.asList(PluginStringManager.getProperty("api.report.args.possibleValue.language").split(",")));
+        languageParam.setPossibleValues(languages);
         languageParam.setDefaultValue(PluginStringManager.getProperty("api.report.args.defaultValue.language"));
 
         // Adding enableDocx argument

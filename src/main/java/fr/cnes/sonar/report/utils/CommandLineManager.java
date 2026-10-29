@@ -61,7 +61,7 @@ public class CommandLineManager {
                     "Branch of the targeted project. Requires Developer Edition or sonarqube-community-branch-plugin. Default: usage of main branch." },
             { "o", "output", Boolean.TRUE.toString(), "Output path for exported resources." },
             { "l", "language", Boolean.TRUE.toString(),
-                    "Language of the report. Values: en_US, fr_FR. Default: en_US." },
+                    "Language of the report. Values: en_US, fr_FR, zh_TW. Default: en_US." },
             { "a", "author", Boolean.TRUE.toString(), "Name of the report writer." },
             { "d", "date", Boolean.TRUE.toString(),
                     "Date for the report. Format: " + StringManager.DATE_PATTERN + ". Default: current date." },

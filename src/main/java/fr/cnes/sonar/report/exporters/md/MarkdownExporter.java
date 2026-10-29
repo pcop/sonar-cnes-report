@@ -97,7 +97,7 @@ public class MarkdownExporter implements IExporter {
 
         try (
                 InputStream fileInputStream = file.exists() && !filename.isEmpty() ? new FileInputStream(file)
-                        : getClass().getResourceAsStream(StringManager.getProperty(DEFAULT_TEMPLATE));) {
+                        : getClass().getResourceAsStream(StringManager.getLocalizedTemplate(DEFAULT_TEMPLATE));) {
             // Getting MD template
             StringWriter writer = new StringWriter();
             IOUtils.copy(fileInputStream, writer, StandardCharsets.UTF_8);

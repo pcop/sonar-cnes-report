@@ -76,6 +76,12 @@ public final class StringManager {
     /** Contains internationalized fields. */
     private static ResourceBundle messages;
 
+    /** Locale currently used for internationalized fields and templates. */
+    private static Locale currentLocale;
+
+    /** Prefix of the bundle keys used to translate security hotspots categories. */
+    private static final String HOTSPOT_CATEGORY_PREFIX = "hotspot.category.";
+
     /** Unique instance of this class (singleton). */
     private static StringManager ourInstance = null;
 
@@ -156,7 +162,7 @@ public final class StringManager {
      */
     public static synchronized void changeLocale(final String language, final String country) {
         // change locale
-        Locale currentLocale = new Locale(language,country);
+        currentLocale = new Locale(language,country);
         // reload messages
         messages = ResourceBundle.getBundle("messages", currentLocale);
     }
@@ -182,6 +188,26 @@ public final class StringManager {
      */
     public static String string(final String key) {
         return messages.getString(key);
+    }
+
+    /**
+     * Give the path of the internal template to use for the current locale.
+     * A template named like the default one with a locale suffix
+     * (e.g. code-analysis-template_zh_TW.docx) is used when it exists, otherwise the default one.
+     * @param property Key of the property giving the default template path.
+     * @return Path of the localized template if available, default template path otherwise.
+     */
+    public static String getLocalizedTemplate(final String property) {
+        final String template = getProperty(property);
+        final int extensionIndex = template.lastIndexOf('.');
+        if (currentLocale != null && extensionIndex > 0) {
+            final String localized = template.substring(0, extensionIndex) + "_" + currentLocale
+                    + template.substring(extensionIndex);
+            if (StringManager.class.getResource(localized) != null) {
+                return localized;
+            }
+        }
+        return template;
     }
 
     /**
@@ -215,10 +241,14 @@ public final class StringManager {
     }
 
     /**
-     * Return a map containing the security hotspots categories names associated to their key
+     * Return a map containing the security hotspots categories names associated to their key.
+     * Names are translated when the current locale provides a "hotspot.category.KEY" message.
      * @return the map
      */
     public static Map<String,String> getSecurityHotspotsCategories() {
-        return SECURITY_HOTSPOT_CATEGORIES;
+        final Map<String, String> categories = new HashMap<>(SECURITY_HOTSPOT_CATEGORIES);
+        categories.replaceAll((key, name) -> messages.containsKey(HOTSPOT_CATEGORY_PREFIX + key)
+                ? messages.getString(HOTSPOT_CATEGORY_PREFIX + key) : name);
+        return categories;
     }
 }
