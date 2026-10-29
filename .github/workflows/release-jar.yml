@@ -1,0 +1,70 @@
+# Description
+# ===========
+# This workflow is triggered each time a GitHub release is published.
+# It builds the plugin jar with the version given by the release tag
+# (a leading "v" is removed, e.g. v5.1.0 -> 5.1.0), runs the tests
+# and attaches the jar and its SHA-256 checksum to the release.
+# It can also be launched manually for an existing release tag.
+---
+name: Release Jar
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to build and attach the jar to'
+        required: true
+
+env:
+  JAVA_BUILD_VERSION: "21"
+
+jobs:
+  package:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ env.TAG }}
+    - name: Setup java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt'
+        java-version: ${{ env.JAVA_BUILD_VERSION }}
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: ${{ runner.os }}-yarn-
+    - name: Set version from release tag
+      run: |
+        version="${TAG#v}"
+        echo "version=${version}" >> $GITHUB_ENV
+        mvn -B -ntp versions:set -DnewVersion="${version}" -DgenerateBackupPoms=false
+    - name: Build with Maven
+      run: mvn -B -ntp clean package
+    - name: Compute checksum
+      run: |
+        cd target
+        sha256sum "sonar-cnes-report-${version}.jar" > "sonar-cnes-report-${version}.jar.sha256"
+    - name: Attach jar to the release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload "${TAG}" \
+          "target/sonar-cnes-report-${version}.jar" \
+          "target/sonar-cnes-report-${version}.jar.sha256" \
+          --clobber
