@@ -122,12 +122,14 @@ public class ReportWsTest {
                 this.reportAction.param(PluginStringManager.getProperty("api.report.args.language")).isRequired());
         assertEquals(PluginStringManager.getProperty("api.report.args.defaultValue.language"),
                 this.reportAction.param(PluginStringManager.getProperty("api.report.args.language")).defaultValue());
-        assertEquals(2, this.reportAction.param(PluginStringManager.getProperty("api.report.args.language"))
+        assertEquals(3, this.reportAction.param(PluginStringManager.getProperty("api.report.args.language"))
                 .possibleValues().size());
         assertTrue(this.reportAction.param(PluginStringManager.getProperty("api.report.args.language")).possibleValues()
                 .contains(PluginStringManager.getProperty("api.report.args.defaultValue.language")));
-        assertTrue(this.reportAction.param(PluginStringManager.getProperty("api.report.args.language")).possibleValues()
-                .contains(PluginStringManager.getProperty("api.report.args.possibleValue.language")));
+        for (String language : PluginStringManager.getProperty("api.report.args.possibleValue.language").split(",")) {
+            assertTrue(this.reportAction.param(PluginStringManager.getProperty("api.report.args.language"))
+                    .possibleValues().contains(language));
+        }
     }
 
     public void testActionDocx() {

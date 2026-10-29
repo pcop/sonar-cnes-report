@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import org.apache.commons.math3.util.Precision;
 
 import fr.cnes.sonar.report.utils.StringManager;
+import fr.cnes.sonar.report.utils.UrlEncoder;
 
 /**
  * Model of a report containing all information
@@ -486,7 +487,9 @@ public class Report {
     /**
      * Construct a string with all quality profiles' filenames
      * 
-     * @return a string like profile1.json profile2.json profile3.json
+     * Filenames match the ones written in the configuration folder (xml export, sanitized key).
+     * 
+     * @return a string like profile1.xml; profile2.xml; profile3.xml;
      */
     public String getQualityProfilesFilename() {
         // gather all names
@@ -494,7 +497,7 @@ public class Report {
 
         // append each quality profile filename
         for (ProfileMetaData q : project.getQualityProfiles()) {
-            sb.append(q.getKey()).append(".json").append("; ");
+            sb.append(UrlEncoder.sanitizeUrlSafe(q.getKey())).append(".xml").append("; ");
         }
 
         return sb.toString();

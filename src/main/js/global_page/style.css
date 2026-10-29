@@ -1,37 +1,118 @@
+/*
+ * Colors are taken from the SonarQube "Echoes" design tokens (--echoes-*) so the page follows
+ * the theme selected in SonarQube (light / dark / system, applied through [data-echoes-theme]).
+ * The fallback values are only used on SonarQube versions that do not provide these tokens;
+ * they follow the operating system preference.
+ */
+.cnes-report-page {
+    --cnes-text: var(--echoes-color-text-default, #3e4357);
+    --cnes-text-subtle: var(--echoes-color-text-subtle, #637192);
+    --cnes-surface: var(--echoes-color-surface-default, #ffffff);
+    --cnes-input-background: var(--echoes-color-surface-default, #ffffff);
+    --cnes-border: var(--echoes-color-border-bold, #c5cddf);
+    --cnes-focus: var(--echoes-color-focus-default, #4b56bb);
+    --cnes-button: var(--echoes-color-background-accent-default, #5d6cd0);
+    --cnes-button-hover: var(--echoes-color-background-accent-hover, #4b56bb);
+    --cnes-button-text: var(--echoes-color-text-on-color, #ffffff);
+    --cnes-disabled: var(--echoes-color-surface-disabled, #eff2f9);
+    --cnes-disabled-text: var(--echoes-color-text-disabled, #a6adc2);
+    --cnes-warning-background: var(--echoes-color-background-warning-weak-default, #fcf5e4);
+    --cnes-warning-border: var(--echoes-color-border-bold, #c5cddf);
+    --cnes-success: var(--echoes-color-text-success, #537c17);
+    --cnes-danger: var(--echoes-color-text-danger, #b42318);
+    color: var(--cnes-text);
+}
+
+@media (prefers-color-scheme: dark) {
+    .cnes-report-page {
+        --cnes-text: var(--echoes-color-text-default, #e1e6f3);
+        --cnes-text-subtle: var(--echoes-color-text-subtle, #c5cddf);
+        --cnes-surface: var(--echoes-color-surface-default, #2a2f40);
+        --cnes-input-background: var(--echoes-color-surface-default, #1d212f);
+        --cnes-border: var(--echoes-color-border-bold, #a6adc2);
+        --cnes-focus: var(--echoes-color-focus-default, #bdc6ff);
+        --cnes-button: var(--echoes-color-background-accent-default, #9fa9ed);
+        --cnes-button-hover: var(--echoes-color-background-accent-hover, #bdc6ff);
+        --cnes-button-text: var(--echoes-color-text-on-color, #2a2f40);
+        --cnes-disabled: var(--echoes-color-surface-disabled, #3e4357);
+        --cnes-disabled-text: var(--echoes-color-text-disabled, #637192);
+        --cnes-warning-background: var(--echoes-color-background-warning-weak-default, #fadc794d);
+        --cnes-warning-border: var(--echoes-color-border-bold, #a6adc2);
+        --cnes-success: var(--echoes-color-text-success, #c4ea9e);
+        --cnes-danger: var(--echoes-color-text-danger, #fda29b);
+    }
+}
+
+/* Native form controls (select, checkbox, scrollbars) follow the SonarQube theme */
+[data-echoes-theme="dark"] .cnes-report-page {
+    color-scheme: dark;
+}
+
+[data-echoes-theme="light"] .cnes-report-page {
+    color-scheme: light;
+}
+
 /* General Styles */
-.maintenance-title {
+.cnes-report-page .maintenance-title {
     font-size: 35px;
-    color: #333;
+    color: var(--cnes-text);
     margin-top: 20px;
     text-align: center;
+}
+
+.cnes-report-page .compatibility-warning {
+    margin: 20px auto 0;
+    max-width: 500px;
+    padding: 10px 20px;
+    color: var(--cnes-text);
+    background-color: var(--cnes-warning-background);
+    border: 1px solid var(--cnes-warning-border);
+    border-radius: 5px;
+}
+
+.cnes-report-page .compatibility-warning a {
+    color: inherit;
+    text-decoration: underline;
 }
 
 #generation-form {
     margin: 20px auto;
     max-width: 500px;
     padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
+    color: var(--cnes-text);
+    background-color: var(--cnes-surface);
+    border: 1px solid var(--cnes-border);
     border-radius: 5px;
 }
 
-.forminput {
+.cnes-report-page .forminput {
     margin-bottom: 15px;
 }
 
-.login-label {
+.cnes-report-page .login-label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
+    color: var(--cnes-text-subtle);
 }
 
-.login-input {
+.cnes-report-page .login-input {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    color: var(--cnes-text);
+    background-color: var(--cnes-input-background);
+    border: 1px solid var(--cnes-border);
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+.cnes-report-page .login-input:focus {
+    outline: 2px solid var(--cnes-focus);
+    outline-offset: 1px;
+}
+
+.cnes-report-page .info-message {
+    color: var(--cnes-text-subtle);
 }
 
 /* Button Styles */
@@ -40,8 +121,8 @@
     margin: 0 auto;
     font-size: 20px;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--cnes-button);
+    color: var(--cnes-button-text);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -49,33 +130,49 @@
 }
 
 #generation:hover {
-    background-color: #45a049;
+    background-color: var(--cnes-button-hover);
+}
+
+#generation:focus-visible {
+    outline: 2px solid var(--cnes-focus);
+    outline-offset: 2px;
 }
 
 #generation:active {
     transform: translateY(2px);
 }
 
-/* Checkbox Styles */
-.checkbox-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
+#generation:disabled {
+    background-color: var(--cnes-disabled);
+    color: var(--cnes-disabled-text);
+    cursor: not-allowed;
+    transform: none;
 }
 
-.checkbox-input {
+/* Checkbox Styles */
+.cnes-report-page .checkbox-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--cnes-text-subtle);
+}
+
+.cnes-report-page .checkbox-input {
     margin-right: 5px;
 }
 
+.cnes-report-page input[type="checkbox"] {
+    accent-color: var(--cnes-button);
+}
+
 /* Optional: Styles for success/error messages */
-.success-message {
-    color: green;
+.cnes-report-page .success-message {
+    color: var(--cnes-success);
     font-weight: bold;
     margin-top: 10px;
 }
 
-.error-message {
-    color: red;
+.cnes-report-page .error-message {
+    color: var(--cnes-danger);
     font-weight: bold;
     margin-top: 10px;
 }

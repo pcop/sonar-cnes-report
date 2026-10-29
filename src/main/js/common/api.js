@@ -5,11 +5,13 @@
 import { getJSON, postJSON, post } from "sonar-request";
 
 // Function used to get current SonarQube Server version
+// Supported versions: SonarQube Server / Community Build 25.x and later (e.g. 26.10)
 export function isCompatible() {
-  const COMPATIBILITY_PATTERN = /(25)(\.\d)(\.\d)*/;
+  const MIN_SUPPORTED_MAJOR = 25;
 
   return getJSON("/api/system/status").then(response => {
-    return response.version.match(COMPATIBILITY_PATTERN) != null;
+    const major = parseInt(String(response.version).split(".")[0], 10);
+    return !isNaN(major) && major >= MIN_SUPPORTED_MAJOR;
   });
 }
 
@@ -72,9 +74,11 @@ function createToken(name) {
 }
 
 // Function used to get the current logged user name
-function getUserName(login) {
-  return getJSON("/api/users/search", { "q": login }).then(response => {
-    return response.users[0].name;
+// api/users/search is deprecated since 10.4 and rejects logins shorter than 2 characters,
+// so the current user is read from api/users/current instead
+function getUserName() {
+  return getJSON("/api/users/current").then(response => {
+    return response.name || response.login;
   });
 }
 
@@ -98,7 +102,7 @@ export function initiatePluginToken() {
 
   return revokeToken(name).then(() => {
     return createToken(name).then(tokenResponse => {
-      return getUserName(tokenResponse.login).then(userResponse => {
+      return getUserName().then(userResponse => {
         return {
           token: tokenResponse.token,
           author: userResponse

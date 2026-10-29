@@ -12,7 +12,7 @@ export default class CnesReportProject extends React.PureComponent {
         loading: true,
         token: "",
         author: "",
-        languages: [{id: 'en_US', name: 'English'}, {id: 'fr_FR', name: 'French'}],
+        languages: [{id: 'en_US', name: 'English'}, {id: 'fr_FR', name: 'French'}, {id: 'zh_TW', name: '正體中文'}],
         enableDocx: true,
         enableMd: true,
         enableXlsx: true,
@@ -65,7 +65,7 @@ export default class CnesReportProject extends React.PureComponent {
 
     render() {
         if (this.state.loading) {
-            return <div className="page page-limited"><p>Loading ...</p></div>;
+            return <div className="page page-limited cnes-report-page"><p>Loading ...</p></div>;
         }
 
         const options = this.props.options;
@@ -77,7 +77,7 @@ export default class CnesReportProject extends React.PureComponent {
         })
 
         return (
-            <div class="page-wrapper-simple">
+            <div class="page-wrapper-simple cnes-report-page">
                 <div class="page-simple">
                     <h1 class="maintenance-title text-center">Generate a report for this project and branch</h1>
                     { !this.state.isSupported &&

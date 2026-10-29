@@ -45,7 +45,7 @@ public class PlaceHoldersTest extends CommonTest {
         expected.put("XX-DUPLICATION-XX", "1.0");
         expected.put("XX-COMMENTDENSITY-XX", "1.0");
         expected.put("XX-MAXNCLOC-XX", "unknown");
-        expected.put("XX-QUALITYGATEFILE-XX", "CNES.xml");
+        expected.put("XX-QUALITYGATEFILE-XX", "CNES.json");
         expected.put("XX-MAXCOGNITIVECOMPLEXITY-XX", "unknown");
         expected.put("XX-QUALITYPROFILENAME-XX", "");
         expected.put("XX-MINCOMMENTDENSITY-XX", "unknown");

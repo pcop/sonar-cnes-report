@@ -64,4 +64,26 @@ public class StringManagerTest {
         StringManager.string(NOT_EXIST);
     }
 
+    /**
+     * Assert that the Traditional Chinese locale provides translated messages,
+     * security hotspots categories and templates, and that other locales keep the defaults.
+     */
+    @Test
+    public void traditionalChineseLocaleTest() {
+        try {
+            StringManager.changeLocale("zh_TW");
+            assertEquals("類型", StringManager.string("header.type"));
+            assertEquals("SQL 注入 (SQL Injection)", StringManager.getSecurityHotspotsCategories().get("sql-injection"));
+            assertEquals("/template/code-analysis-template_zh_TW.docx", StringManager.getLocalizedTemplate("docx.template"));
+            assertEquals("/template/code-analysis-template_zh_TW.md", StringManager.getLocalizedTemplate("md.template"));
+            assertEquals("/template/issues-template.xlsx", StringManager.getLocalizedTemplate("xlsx.template"));
+
+            StringManager.changeLocale("en_US");
+            assertEquals("SQL Injection", StringManager.getSecurityHotspotsCategories().get("sql-injection"));
+            assertEquals("/template/code-analysis-template.docx", StringManager.getLocalizedTemplate("docx.template"));
+        } finally {
+            StringManager.changeLocale(StringManager.getProperty(StringManager.DEFAULT_LANGUAGE));
+        }
+    }
+
 }
