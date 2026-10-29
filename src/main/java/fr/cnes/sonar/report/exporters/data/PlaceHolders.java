@@ -23,6 +23,7 @@ import java.util.Map;
 
 import fr.cnes.sonar.report.model.Measure;
 import fr.cnes.sonar.report.model.Report;
+import fr.cnes.sonar.report.utils.UrlEncoder;
 
 /**
  * Class used to link data with report templates placeholders
@@ -136,9 +137,9 @@ public class PlaceHolders {
     private static final String MINCOVERAGE_STATKEY = "mincoverage";
     private static final String MAXCOVERAGE_STATKEY = "maxcoverage";
     /**
-     * extension for xml file
+     * extension for json file (quality gate configuration export)
      */
-    private static final String XML_EXTENSION = ".xml";
+    private static final String JSON_EXTENSION = ".json";
     /**
      * Field name of a measure rating
      */
@@ -372,7 +373,7 @@ public class PlaceHolders {
                 report.getQualityGate().getName());
         replacementValues.put(
                 QUALITYGATEFILE_PLACEHOLDER,
-                report.getQualityGate().getName() + XML_EXTENSION);
+                UrlEncoder.sanitizeUrlSafe(report.getQualityGate().getName()) + JSON_EXTENSION);
         replacementValues.put(
                 QUALITYPROFILENAME_PLACEHOLDER,
                 report.getQualityProfilesName());
