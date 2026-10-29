@@ -81,10 +81,11 @@ All maintainers have the ability to merge *pull requests* on the `dev` branch. I
 
 ## Release process
 In order to release a new version of your plugin, make sure that
-- pom.xml is up to date with the right version, see `<project>[...]<version>UPDATE VERSION HERE</version>[...]</project>`
-- All tests are green and Sonarcloud Quality Gate is passed
+- All tests are green
 - All issues are closed and everything is merge to `dev`
 
-Once everything is ready, go to the `Actions`, choose the `Draft release` workflow and hit the `Run workflow` button ! The CI/CD will compile, tag and publish a draft release.
+Once everything is ready, create a GitHub release with a tag named after the version (e.g. `v5.1.0`) and publish it.
+The `Release Jar` workflow then builds the plugin with the version taken from the tag (the leading `v` is removed),
+runs the tests and attaches the `.jar` file and its `.sha256` checksum to the release.
 
-Double check the release (is changelog here ? Tags are ok ? .jar file is in the assets ?) then publish it !
+The workflow can also be launched manually from the `Actions` tab with an existing release tag to rebuild its `.jar` file.
